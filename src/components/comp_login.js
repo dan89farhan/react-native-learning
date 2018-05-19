@@ -86,7 +86,7 @@ export default class Login extends Component {
           onPress={() => {
             this.retrive_from_db();
           }}
-          title="retrive from db"
+          title="retrive from bd"
           color="#841584"
           accessibilityLabel="Learn more about this purple button"
         />
