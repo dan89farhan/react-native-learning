@@ -19,6 +19,8 @@ import {
   Text
 } from "native-base";
 
+// import firebase
+import db from "firebase";
 // import Expo from "expo";
 
 export default class StackedLabelExample extends Component {
@@ -29,6 +31,12 @@ export default class StackedLabelExample extends Component {
       loading: true,
       Sork: true
     };
+    let dbCon = db.database().ref("/test");
+    dbCon.push({
+      message: "Message"
+    });
+
+    console.log("Connected to firebase ", dbCon);
   }
 
   async UNSAFE_componentWillMount() {
@@ -64,7 +72,7 @@ export default class StackedLabelExample extends Component {
         <Header>
           <Left />
           <Body>
-            <Title>Header</Title>
+            <Title>Home</Title>
           </Body>
           <Right>
             <Button
