@@ -11,7 +11,8 @@ import {
 import db from "firebase";
 import RNFetchBlob from "react-native-fetch-blob";
 
-var ImagePicker = require("react-native-image-picker");
+// var ImagePicker = require("react-native-image-picker");
+import ImagePicker from "react-native-image-picker";
 
 // More info on all the options is below in the README...just some common use cases shown here
 var options = {
@@ -90,6 +91,11 @@ export default class Apps extends Component {
         this.uploadImage(response.uri)
           .then(url => {
             alert("uploaded");
+            // let dbCon = db.database().ref("/test");
+            // let orderID = this.state.basicInfo.orderID;
+            // let orderID = this.state.order.orderID;
+
+            // dbCon.push({ image_uri: url });
             this.setState({ image_uri: url });
           })
           .catch(error => console.log(error));

@@ -19,7 +19,7 @@ class MeasurementsForPorJ extends Component {
         bottom: 0,
         backrise: 0
       },
-      imageUrl: "",
+
       basicInfo: this.props.basicInfo,
       clothType: this.props.clothType
     };
@@ -101,9 +101,7 @@ class MeasurementsForPorJ extends Component {
               }
             />
           </Item>
-          <Button block info>
-            <Text> Upload Image </Text>
-          </Button>
+
           <Button block primary onPress={this.saveToDB.bind(this)}>
             <Text> Submit </Text>
           </Button>

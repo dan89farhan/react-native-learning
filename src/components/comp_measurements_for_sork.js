@@ -20,9 +20,10 @@ class MeasurementsForSorK extends Component {
         collom: 0,
         cuff: 0
       },
-      imageUrl: "",
+
       basicInfo: this.props.basicInfo,
-      clothType: this.props.clothType
+      clothType: this.props.clothType,
+      order: this.props.order
     };
   }
 
@@ -31,20 +32,24 @@ class MeasurementsForSorK extends Component {
     console.log("basic info ", this.state.basicInfo);
     console.log("measurements ", this.state.measurements);
     console.log("Cloth type ", this.state.clothType);
+    console.log('order details ', this.state.order);
+    
   }
 
   saveToDB() {
     let dbCon = db.database().ref("/orders");
-
+    // let orderID = this.state.basicInfo.orderID;
+    let orderID = this.state.order.orderID;
     let obj = {};
-    obj["1"] = this.state.basicInfo;
-    obj["1"]["measurements"] = {};
-    obj["1"]["measurements"][
+    obj[orderID] = {};
+    obj[orderID] = this.state.basicInfo;
+    obj[orderID]["measurements"] = {};
+    obj[orderID]["measurements"][
       this.state.clothType.type
     ] = this.state.measurements;
-    obj["1"]["image_url"] = this.state.imageUrl;
-    dbCon.set(obj);
+
     console.log("obj info ", obj);
+    dbCon.set(obj);
   }
   uploadImage() {
     let dbCon = db.storage.ref("/");
@@ -112,9 +117,7 @@ class MeasurementsForSorK extends Component {
             <Label>Cuff</Label>
             <Input onChangeText={cuff => this.setMesurements("cuff", cuff)} />
           </Item>
-          <Button block info>
-            <Text> Upload Image </Text>
-          </Button>
+
           <Button block primary onPress={this.saveToDB.bind(this)}>
             <Text> Submit </Text>
           </Button>

@@ -143,8 +143,12 @@ dependencies {
     compile "com.android.support:appcompat-v7:23.0.1"
     compile "com.facebook.react:react-native:+"  // From node_modules
 
-    // User added
+
+    // Munually added
     compile project(':react-native-fetch-blob') // for file uploading
+    compile project(':react-native-image-picker') // for image picking
+
+
 }
 
 // Run this once to be able to run the application with BUCK
