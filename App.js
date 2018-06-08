@@ -5,6 +5,7 @@ import { createStackNavigator } from "react-navigation";
 
 import Home from "./src/components/comp_home";
 import Manage from "./src/components/comp_manage";
+import Apps from "./src/components/imageTesting";
 
 const RootStack = createStackNavigator(
   {
@@ -13,10 +14,13 @@ const RootStack = createStackNavigator(
     },
     Manage: {
       screen: Manage
+    },
+    Apps: {
+      screen: Apps
     }
   },
   {
-    initialRouteName: "Home",
+    initialRouteName: "Apps",
     headerMode: "none"
   }
 );

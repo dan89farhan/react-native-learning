@@ -19,8 +19,7 @@ import {
   Text
 } from "native-base";
 
-// import firebase
-import db from "firebase";
+
 // import Expo from "expo";
 
 // import for SorK and PorJ
@@ -39,16 +38,7 @@ export default class StackedLabelExample extends Component {
     };
   }
 
-  async UNSAFE_componentWillMount() {
-    // await Expo.Font.loadAsync({
-    //   Roboto: require("native-base/Fonts/Roboto.ttf"),
-    //   Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
-    //   Ionicons: require("@expo/vector-icons/fonts/Ionicons.ttf")
-    // });
-    // this.setState({ loading: false });
-  }
-
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.setState({
       basicInfo: {
         name: "",
