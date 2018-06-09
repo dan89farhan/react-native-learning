@@ -84,21 +84,123 @@ export default class Apps extends Component {
       } else {
         // let source = { uri: response.uri };
         // this.setState({image_uri: response.uri})
-
         // You can also display the image using data:
         // let image_uri = { uri: 'data:image/jpeg;base64,' + response.data };
+        //   this.uploadImage(response.uri)
+        //     .then(url => {
+        //       try {
+        //         alert("uploaded");
+        //         // let dbCon = db.database().ref("/test");
+        //         // let orderID = this.state.basicInfo.orderID;
+        //         // let orderID = this.state.order.orderID;
+        //         // dbCon.push({ image_uri: url });
+        //         this.setState({ image_uri: url });
+        //       } catch (error) {
+        //         console.log("error is ", error);
+        //       }
+        //     })
+        //     .catch(error => console.log(error));
+      }
+    });
+  }
 
-        this.uploadImage(response.uri)
-          .then(url => {
-            alert("uploaded");
-            // let dbCon = db.database().ref("/test");
-            // let orderID = this.state.basicInfo.orderID;
-            // let orderID = this.state.order.orderID;
+  pickImage() {
+    ImagePicker.showImagePicker(options, response => {
+      console.log("Response = ", response);
 
-            // dbCon.push({ image_uri: url });
-            this.setState({ image_uri: url });
-          })
-          .catch(error => console.log(error));
+      if (response.didCancel) {
+        console.log("User cancelled image picker");
+      } else if (response.error) {
+        console.log("ImagePicker Error: ", response.error);
+      } else if (response.customButton) {
+        console.log("User tapped custom button: ", response.customButton);
+      } else {
+        // var data = new FormData();
+        // console.log("file path ", response.path);
+        // data.append("file", response.path);
+        // data.append("upload_preset", "pixolo");
+
+        // var xhr = new XMLHttpRequest();
+        // xhr.withCredentials = true;
+        // console.log("Object details is ", xhr);
+
+        // xhr.onreadystatechange = e => {
+        //   if (xhr.readyState === 4) {
+        //     alert("response text ", xhr.responseText);
+        //     console.log(xhr.responseText);
+        //   }
+        //   if (this.status === 200) {
+        //     console.log("success", xhr.responseText);
+        //   } else {
+        //     console.warn("error " + xhr.responseText);
+        //   }
+        // };
+
+        // xhr.open(
+        //   "POST",
+        //   "https://api.cloudinary.com/v1_1/farhanpixolo/image/upload"
+        // );
+        // xhr.setRequestHeader("cache-control", "no-cache");
+
+        // xhr.send(data);
+
+        let upload_preset = "pixolo";
+
+        let cloud = "farhanpixolo";
+
+        let upload_url =
+          "https://api.cloudinary.com/v1_1/" + cloud + "/image/upload";
+
+        let xhr = new XMLHttpRequest();
+
+        xhr.open("POST", upload_url);
+
+        xhr.onload = () => {
+          console.log(xhr);
+        };
+
+        let formdata = new FormData();
+
+        formdata.append("file", {
+          uri: response.uri,
+          type: "image/jpeg",
+          name: response.fileName
+        });
+        formdata.append("upload_preset", upload_preset);
+
+        xhr.send(formdata);
+
+        //   // this.setState({ image: response.uri });
+
+        //   // let base64Img = `data:image/jpg;base64,${response.base64}`;
+        //   let base64Img = response.path;
+
+        //   //Add your cloud name
+
+        //   let apiUrl =
+        //     "https://api.cloudinary.com/v1_1/farhanpixolo/image/upload";
+
+        //   let data = {
+        //     file: base64Img,
+
+        //     upload_preset: "pixolo"
+        //   };
+
+        //   fetch(apiUrl, {
+        //     body: JSON.stringify(data),
+
+        //     headers: {
+        //       "content-type": "application/json"
+        //     },
+
+        //     method: "POST"
+        //   })
+        //     .then(r => {
+        //       let data = r._bodyText;
+
+        //       console.log(r);
+        //     })
+        //     .catch(err => console.log(err));
       }
     });
   }
@@ -113,7 +215,7 @@ export default class Apps extends Component {
           style={{ width: 100, height: 100 }}
           source={{ uri: this.state.image_uri }}
         />
-        <Button onPress={this.getImage} title="Change Image" color="#841584" />
+        <Button onPress={this.pickImage} title="Change Image" color="#841584" />
       </View>
     );
   }
