@@ -1,13 +1,5 @@
 import React, { Component } from "react";
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  Image,
-  Platform,
-  Button,
-  View
-} from "react-native";
+import { StyleSheet, Text, Image, Platform, Button, View } from "react-native";
 import db from "firebase";
 import RNFetchBlob from "react-native-fetch-blob";
 
@@ -26,6 +18,7 @@ var options = {
 
 // Prepare Blob support
 const Blob = RNFetchBlob.polyfill.Blob;
+
 const fs = RNFetchBlob.fs;
 window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
 window.Blob = Blob;
@@ -86,20 +79,59 @@ export default class Apps extends Component {
         // this.setState({image_uri: response.uri})
         // You can also display the image using data:
         // let image_uri = { uri: 'data:image/jpeg;base64,' + response.data };
-        //   this.uploadImage(response.uri)
-        //     .then(url => {
-        //       try {
-        //         alert("uploaded");
-        //         // let dbCon = db.database().ref("/test");
-        //         // let orderID = this.state.basicInfo.orderID;
-        //         // let orderID = this.state.order.orderID;
-        //         // dbCon.push({ image_uri: url });
-        //         this.setState({ image_uri: url });
-        //       } catch (error) {
-        //         console.log("error is ", error);
-        //       }
-        //     })
-        //     .catch(error => console.log(error));
+        // this.uploadImage(response.uri)
+        //   .then(url => {
+        //     try {
+        //       alert("uploaded");
+        //       // let dbCon = db.database().ref("/test");
+        //       // let orderID = this.state.basicInfo.orderID;
+        //       // let orderID = this.state.order.orderID;
+        //       // dbCon.push({ image_uri: url });
+        //       this.setState({ image_uri: url });
+        //     } catch (error) {
+        //       console.log("error is ", error);
+        //     }
+        //   })
+        //   .catch(error => console.log(error));
+
+        let rnfbURI = RNFetchBlob.wrap(response.uri);
+
+        console.log("rnfbURI ", rnfbURI);
+
+        // create Blob from file path
+        console.log("Blob is ", Blob);
+
+        Blob.build(rnfbURI, { type: "image/png;" })
+          .then(value => {
+            // upload image using Firebase SDK
+            console.log("value is ", value);
+            db.storage()
+              .ref("images")
+              .child("image1")
+              .putString(value, { contentType: "image/png" })
+              .then(snapshot => {
+                alert("upload successful " + JSON.stringify(snapshot.metadata));
+                console.log("in upload ", snapshot);
+
+                // report(
+                //   <Assert key="upload success" expect={true} actual={true} />,
+
+                //   <Info key="uploaded file stat">
+                //     <Text>{snapshot.totalBytes}</Text>
+
+                //     <Text>{JSON.stringify(snapshot.metadata)}</Text>
+                //   </Info>
+                // );
+
+                value.close();
+              })
+              .catch(error => {
+                alert("error " + error);
+              });
+          })
+          .catch(error => {
+            console.log("error is ", error);
+          });
       }
     });
   }
@@ -115,95 +147,57 @@ export default class Apps extends Component {
       } else if (response.customButton) {
         console.log("User tapped custom button: ", response.customButton);
       } else {
-        // var data = new FormData();
-        // console.log("file path ", response.path);
-        // data.append("file", response.path);
-        // data.append("upload_preset", "pixolo");
-
-        // var xhr = new XMLHttpRequest();
-        // xhr.withCredentials = true;
-        // console.log("Object details is ", xhr);
-
-        // xhr.onreadystatechange = e => {
-        //   if (xhr.readyState === 4) {
-        //     alert("response text ", xhr.responseText);
-        //     console.log(xhr.responseText);
-        //   }
-        //   if (this.status === 200) {
-        //     console.log("success", xhr.responseText);
-        //   } else {
-        //     console.warn("error " + xhr.responseText);
-        //   }
-        // };
-
-        // xhr.open(
-        //   "POST",
-        //   "https://api.cloudinary.com/v1_1/farhanpixolo/image/upload"
-        // );
-        // xhr.setRequestHeader("cache-control", "no-cache");
-
-        // xhr.send(data);
-
-        let upload_preset = "pixolo";
-
-        let cloud = "farhanpixolo";
-
-        let upload_url =
-          "https://api.cloudinary.com/v1_1/" + cloud + "/image/upload";
-
-        let xhr = new XMLHttpRequest();
-
-        xhr.open("POST", upload_url);
-
-        xhr.onload = () => {
-          console.log(xhr);
-        };
-
-        let formdata = new FormData();
-
-        formdata.append("file", {
-          uri: response.uri,
-          type: "image/jpeg",
-          name: response.fileName
+        // console.log("state ", this.state);
+        uri = `file://${response.path}`;
+        this.setState({
+          image_uri: uri
         });
-        formdata.append("upload_preset", upload_preset);
-
-        xhr.send(formdata);
-
-        //   // this.setState({ image: response.uri });
-
-        //   // let base64Img = `data:image/jpg;base64,${response.base64}`;
-        //   let base64Img = response.path;
-
-        //   //Add your cloud name
-
-        //   let apiUrl =
-        //     "https://api.cloudinary.com/v1_1/farhanpixolo/image/upload";
-
-        //   let data = {
-        //     file: base64Img,
-
-        //     upload_preset: "pixolo"
-        //   };
-
-        //   fetch(apiUrl, {
-        //     body: JSON.stringify(data),
-
-        //     headers: {
-        //       "content-type": "application/json"
-        //     },
-
-        //     method: "POST"
-        //   })
-        //     .then(r => {
-        //       let data = r._bodyText;
-
-        //       console.log(r);
-        //     })
-        //     .catch(err => console.log(err));
+        this.uploadImage(uri, "image1")
+          .then(success => {
+            try {
+              // alert("success " + success);
+            } catch (error) {
+              alert("error in catch " + error);
+            }
+          })
+          .catch(error => {
+            alert("error " + JSON.stringify(error));
+          });
       }
     });
   }
+
+  uploadImage = (uri, imageName, mime = "image/jpg") => {
+    return new Promise((resolve, reject) => {
+      const uploadUri =
+        Platform.OS === "ios" ? uri.replace("file://", "") : uri;
+      let uploadBlob = null;
+      const imageRef = db
+        .storage()
+        .ref("images/")
+        .child(imageName);
+
+      fs.readFile(uploadUri, "base64")
+        .then(data => {
+          return Blob.build(data, { type: `${mime};BASE64` });
+        })
+        .then(blob => {
+          uploadBlob = blob;
+          alert("blob is " + JSON.stringify(blob));
+          return imageRef.put(blob, { contentType: mime });
+        })
+        .then(() => {
+          uploadBlob.close();
+          return imageRef.getDownloadURL();
+        })
+        .then(url => {
+          resolve(url);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  };
 
   render() {
     return (
@@ -215,7 +209,11 @@ export default class Apps extends Component {
           style={{ width: 100, height: 100 }}
           source={{ uri: this.state.image_uri }}
         />
-        <Button onPress={this.pickImage} title="Change Image" color="#841584" />
+        <Button
+          onPress={this.pickImage.bind(this)}
+          title="Change Image"
+          color="#841584"
+        />
       </View>
     );
   }
