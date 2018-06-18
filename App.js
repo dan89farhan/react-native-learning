@@ -4,6 +4,7 @@ import { createStackNavigator } from "react-navigation";
 
 import Home from "./src/components/comp_home";
 import Manage from "./src/components/comp_manage";
+import Result from './src/components/comp_result';
 
 const RootStack = createStackNavigator(
   {
@@ -12,10 +13,13 @@ const RootStack = createStackNavigator(
     },
     Manage: {
       screen: Manage
+    },
+    Result: {
+      screen: Result
     }
   },
   {
-    initialRouteName: "Home",
+    initialRouteName: "Manage",
     headerMode: "none"
   }
 );

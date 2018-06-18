@@ -14,9 +14,13 @@ import ImagePicker from "react-native-image-picker";
 const Blob = RNFetchBlob.polyfill.Blob;
 
 const fs = RNFetchBlob.fs;
-window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
-window.Blob = Blob;
-
+// window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
+// window.Blob = Blob;
+// const contentsource = [
+//   {
+//     image: require("https://firebasestorage.googleapis.com/v0/b/tailorapp-fd888.appspot.com/o/images%2F1?alt=media&token=9557f62a-feac-4117-be2a-c107985cf806")
+//   }
+// ];
 class MeasurementsForSorK extends Component {
   constructor(props) {
     super(props);
@@ -33,12 +37,16 @@ class MeasurementsForSorK extends Component {
         collom: 0,
         cuff: 0
       },
-      imageUrl:
-        "https://firebasestorage.googleapis.com/v0/b/tailorapp-fd888.appspot.com/o/images%2F6?alt=media&token=adb96d43-c0ab-4fa9-97eb-6340d187c25a",
+      imageUrl: "https://firebasestorage.googleapis.com/v0/b/tailorapp-fd888.appspot.com/o/images%2F1?alt=media&token=9557f62a-feac-4117-be2a-c107985cf806",
       basicInfo: this.props.basicInfo,
       clothType: this.props.clothType,
       order: this.props.order
     };
+  }
+
+
+  componentDidMount() {
+
   }
 
   setMesurements(key, value) {
@@ -46,48 +54,57 @@ class MeasurementsForSorK extends Component {
     // console.log("measurements ", this.state.measurements);
     // console.log("basic info ", this.state.basicInfo);
     // console.log("Cloth type ", this.state.clothType);
-    // console.log("order ", this.state.order);
+    console.log("order ", this.state.order);
   }
 
   saveToDB() {
     let orderID = this.state.order.orderID;
 
-    this.uploadImage(uri, orderID)
-      .then(success => {
-        console.log("success  ", success);
-        try {
-          this.setState(
-            {
-              imageUrl: success
-            },
-            () => {
-              let dbCon = db.database().ref("/orders/" + orderID);
+    let orderIDError = this.state.order.orderIDError;
 
-              let obj = {};
-              obj = this.state.basicInfo;
-              obj["measurements"] = {};
-              obj["measurements"][
-                this.state.clothType.type
-              ] = this.state.measurements;
-              obj["image_url"] = success;
-              dbCon.set(obj);
-              // console.log("obj info ", obj);
-              alert("Successfully uploading the data to the server");
-            }
-          );
-        } catch (error) {
+    // alert("orderIDError is " + JSON.stringify(this.state.order));
+    console.log("Order status ", this.state.order);
+
+    if (orderIDError == true) {
+      this.uploadImage(uri, orderID)
+        .then(success => {
+          console.log("success  ", success);
+          try {
+            this.setState(
+              {
+                imageUrl: success
+              },
+              () => {
+                let dbCon = db.database().ref("/orders/" + orderID);
+
+                let obj = {};
+                obj = this.state.basicInfo;
+                obj["measurements"] = {};
+                obj["measurements"][
+                  this.state.clothType.type
+                ] = this.state.measurements;
+                obj["image_url"] = success;
+                dbCon.set(obj);
+                // console.log("obj info ", obj);
+                alert("Successfully uploading the data to the server");
+              }
+            );
+          } catch (error) {
+            alert(
+              "Check your internet connection or give me permission to internet access " +
+              error
+            );
+          }
+        })
+        .catch(error => {
           alert(
             "Check your internet connection or give me permission to internet access " +
-              error
-          );
-        }
-      })
-      .catch(error => {
-        alert(
-          "Check your internet connection or give me permission to internet access " +
             JSON.stringify(error)
-        );
-      });
+          );
+        });
+    } else {
+      alert("Order ID has already been used!");
+    }
   }
   pickImage() {
     // More info on all the options is below in the README...just some common use cases shown here
@@ -125,7 +142,7 @@ class MeasurementsForSorK extends Component {
       let uploadBlob = null;
       const imageRef = db
         .storage()
-        .ref("images/")
+        .ref("/")
         .child(imageName);
 
       fs.readFile(uploadUri, "base64")
@@ -136,10 +153,14 @@ class MeasurementsForSorK extends Component {
           uploadBlob = blob;
 
           console.log("upload image upload ", uploadBlob);
-          return imageRef.put(blob, { contentType: mime });
+          return imageRef.put(blob, { contentType: mime }).on('state_changed', (snapeShot) => {
+            console.log('snapeShot ', snapeShot);
+
+          });
         })
         .then(() => {
           uploadBlob.close();
+
           console.log("upload image download url ", uploadBlob.close());
           return imageRef.getDownloadURL();
         })
@@ -153,6 +174,8 @@ class MeasurementsForSorK extends Component {
   };
 
   render() {
+    console.log("image url ", this.state.imageUrl);
+
     return (
       <CardItem bordered>
         <Body>
