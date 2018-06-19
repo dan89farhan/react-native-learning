@@ -38,11 +38,12 @@ export default class InlineLabelExample extends Component {
       selected: "orderno",
       enabled: false,
       loading: true,
-      sork: false,
-      retmeasurements: null,
+      Sork: true,
+      measurements: null,
       name: null,
       orderno: null,
       contactno: null,
+      searchstring: '1',
       basicInfo: {},
       clothType: {},
       order: {}
@@ -117,7 +118,7 @@ export default class InlineLabelExample extends Component {
             });
 
           recentPostsRef.child(result).on("value", snapshot => {
-            this.setState({ retmeasurements: snapshot.val() });
+            this.setState({ measurements: snapshot.val() });
             console.log(snapshot.val());
             console.log(totalresult.length);
             snapshot.forEach(function (data) {
@@ -159,7 +160,7 @@ export default class InlineLabelExample extends Component {
               });
             });
           recentPostsRef.child(resultmob).on("value", snapshot => {
-            this.setState({ retmeasurements: snapshot.val() });
+            this.setState({ measurements: snapshot.val() });
             console.log(snapshot.val());
 
             snapshot.forEach(function (data) {
@@ -192,38 +193,40 @@ export default class InlineLabelExample extends Component {
           alert('in order' + this.state.searchstring);
           searchquery = this.state.searchstring;
           recentPostsRef.child(searchquery).on("value", snapshot => {
-            this.setState({ retmeasurements: snapshot.val() });
-            console.log(snapshot.val());
+
+            // console.log(snapshot.val());
             const result = snapshot.val();
             if (result && result != null) {
-              alert('measuremnets ' + JSON.stringify(snapshot.val()));
+              this.setState({ measurements: snapshot.val().measurements });
+              alert('measuremnets ' + JSON.stringify(this.state.measurements));
               snapshot.forEach(function (data) {
                 // console.log(data.key);
               });
 
-              if (
-                snapshot.child("measurements/shirt").exists() ||
-                snapshot.child("measurements/kurta").exists()
-              ) {
-                this.setState({
-                  sork: true
-                });
-              } else {
-                this.setState({
-                  sork: false
-                });
-              }
-              this.setState({
-                enabled: true
-              });
+              // if (
+              //   snapshot.child("measurements/shirt").exists() ||
+              //   snapshot.child("measurements/kurta").exists()
+              // ) {
+              //   this.setState({
+              //     sork: true
+              //   });
+              // } else {
+              //   this.setState({
+              //     sork: false
+              //   });
+              // }
+              // this.setState({
+              //   enabled: true
+              // });
 
               this._setstatenull();
-              this.props.navigation.navigate("Results", this.state);
+              this.props.navigation.navigate("Result", { measurements: this.state.measurements });
 
             }
 
 
           });
+
 
           break;
         default:
@@ -292,6 +295,7 @@ export default class InlineLabelExample extends Component {
                       onChangeText={searchstring =>
                         this.setState({ searchstring: searchstring })
                       }
+                      value={this.state.searchstring}
                     />
                   </Item>
                 </Body>
@@ -300,11 +304,12 @@ export default class InlineLabelExample extends Component {
                 <Text> Enter </Text>
               </Button>
 
+
             </Card>
           </Form>
 
         </Content>
-        <Home />
+
       </Container>
 
     );

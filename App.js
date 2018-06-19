@@ -6,6 +6,7 @@ import Home from "./src/components/comp_home";
 import Manage from "./src/components/comp_manage";
 import Result from './src/components/comp_result';
 
+
 const RootStack = createStackNavigator(
   {
     Home: {

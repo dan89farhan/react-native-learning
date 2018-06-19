@@ -37,7 +37,7 @@ class MeasurementsForSorK extends Component {
         collom: 0,
         cuff: 0
       },
-      imageUrl: "https://firebasestorage.googleapis.com/v0/b/tailorapp-fd888.appspot.com/o/images%2F1?alt=media&token=9557f62a-feac-4117-be2a-c107985cf806",
+      imageUrl: "https://firebasestorage.googleapis.com/v0/b/tailorapp-fd888.appspot.com/o/29.jpg?alt=media&token=dc54b3ce-e05d-4340-b5aa-c1e8c8c9aa02",
       basicInfo: this.props.basicInfo,
       clothType: this.props.clothType,
       order: this.props.order
@@ -68,6 +68,7 @@ class MeasurementsForSorK extends Component {
     if (orderIDError == true) {
       this.uploadImage(uri, orderID)
         .then(success => {
+          alert('success ' + success)
           console.log("success  ", success);
           try {
             this.setState(
@@ -143,7 +144,7 @@ class MeasurementsForSorK extends Component {
       const imageRef = db
         .storage()
         .ref("/")
-        .child(imageName);
+        .child(`${imageName}.jpg`);
 
       fs.readFile(uploadUri, "base64")
         .then(data => {
@@ -153,10 +154,7 @@ class MeasurementsForSorK extends Component {
           uploadBlob = blob;
 
           console.log("upload image upload ", uploadBlob);
-          return imageRef.put(blob, { contentType: mime }).on('state_changed', (snapeShot) => {
-            console.log('snapeShot ', snapeShot);
-
-          });
+          return imageRef.put(blob, { contentType: mime })
         })
         .then(() => {
           uploadBlob.close();
@@ -188,6 +186,7 @@ class MeasurementsForSorK extends Component {
               }}
               keyboardType="numeric"
               onChangeText={length => this.setMesurements("length", length)}
+              value={`${this.state.measurements.length}`}
             />
           </Item>
           <Item inlineLabel>
@@ -204,6 +203,7 @@ class MeasurementsForSorK extends Component {
               onChangeText={shoulder =>
                 this.setMesurements("shoulder", shoulder)
               }
+              value={`${this.state.measurements.shoulder}`}
             />
           </Item>
           <Item inlineLabel>
@@ -218,6 +218,7 @@ class MeasurementsForSorK extends Component {
               }}
               keyboardType="numeric"
               onChangeText={sleeves => this.setMesurements("sleeves", sleeves)}
+              value={`${this.state.measurements.sleeves}`}
             />
           </Item>
           <Item inlineLabel>
@@ -232,6 +233,7 @@ class MeasurementsForSorK extends Component {
               }}
               keyboardType="numeric"
               onChangeText={chest => this.setMesurements("chest", chest)}
+              value={`${this.state.measurements.chest}`}
             />
           </Item>
           <Item inlineLabel>
@@ -246,6 +248,7 @@ class MeasurementsForSorK extends Component {
               }}
               keyboardType="numeric"
               onChangeText={stomach => this.setMesurements("stomach", stomach)}
+              value={`${this.state.measurements.stomach}`}
             />
           </Item>
           <Item inlineLabel>
@@ -260,6 +263,7 @@ class MeasurementsForSorK extends Component {
               }}
               keyboardType="numeric"
               onChangeText={seat => this.setMesurements("seat", seat)}
+              value={`${this.state.measurements.seat}`}
             />
           </Item>
           <Item inlineLabel>
@@ -276,6 +280,7 @@ class MeasurementsForSorK extends Component {
               onChangeText={frontfix =>
                 this.setMesurements("frontfix", frontfix)
               }
+              value={`${this.state.measurements.frontfix}`}
             />
           </Item>
           <Item inlineLabel>
@@ -290,6 +295,7 @@ class MeasurementsForSorK extends Component {
               }}
               keyboardType="numeric"
               onChangeText={collom => this.setMesurements("collom", collom)}
+              value={`${this.state.measurements.collom}`}
             />
           </Item>
           <Item inlineLabel>
@@ -300,6 +306,7 @@ class MeasurementsForSorK extends Component {
               }}
               keyboardType="numeric"
               onChangeText={cuff => this.setMesurements("cuff", cuff)}
+              value={`${this.state.measurements.cuff}`}
             />
           </Item>
           <Image

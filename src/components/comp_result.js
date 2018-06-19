@@ -16,444 +16,232 @@ import {
     Label,
     Input
 } from "native-base";
+import { Image, FlatList } from 'react-native';
+
 const cards = [
-    {
-        text: "Card One",
-        name: "One"
-        // image: require("./img/swiper-1.png")
-    },
-    {
-        text: "Card One",
-        name: "two"
-        // image: require("./img/swiper-1.png")
-    }
+    // {
+    //     text: 'Card One',
+    //     name: 'One',
+    //     image: require('../assests/login.png'),
+    // },
+    // {
+    //     text: 'Card One',
+    //     name: 'One',
+    //     image: require('../assests/login.png'),
+    // },
+
 ];
 export default class SearchResults extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            measurements: [
+
+            ],
+            temp: false
+        }
+    }
+    componentDidMount() {
+        // this.state.measurements.push( this.props.measurements) 
+        const { navigation } = this.props;
+        const measurements = navigation.getParam('measurements', 'NO-measurements');
+
+        this.state.measurements.push(measurements)
+        this.state.measurements.push(measurements)
+        this.setState({
+            temp: false
+        })
+        this.forceUpdate()
+        // alert('measurements ' + JSON.stringify(this.state.measurements))
+        console.log('measurements ', this.state.measurements);
+
+        // this.setState({ measurements: measurements })
+        // const otherParam = navigation.getParam('otherParam', 'some default value');
+
+    }
+
     render() {
+        console.log('in render measurements ', this.state.measurements);
         return (
             <Container>
                 <Header />
                 <View>
-                    <DeckSwiper
-                        ref={c => (this._deckSwiper = c)}
-                        dataSource={cards}
-                        renderEmpty={() => (
-                            <View style={{ alignSelf: "center" }}>
-                                <Text>Over</Text>
-                            </View>
-                        )}
-                        renderItem={item => (
-                            <Card style={{ elevation: 1 }}>
-                                <Card>
-                                    <CardItem bordered>
+                    <FlatList
+                        data={this.state.measurements}
+                        renderItem={({ item }) =>
+                            <Card style={{ elevation: 3 }}>
+                                {/* <CardItem>
+                                    <Left>
+                                        <Thumbnail source={item.image} />
+                                        <Body>
+                                            <Text>{item.text}</Text>
+                                            <Text note>NativeBase</Text>
+                                        </Body>
+                                    </Left>
+                                </CardItem>
+                                <CardItem cardBody>
+                                    <Image style={{ height: 300, flex: 1 }} source={item.image} />
+                                </CardItem>
+                                <CardItem>
+                                    <Icon name="heart" style={{ color: '#ED4A6A' }} />
+                                    <Text>{item.name}</Text>
+                                </CardItem> */}
+
+                                <CardItem bordered>
+                                    <Body>
                                         <Item inlineLabel>
-                                            <Label>Name</Label>
+                                            <Label>Length</Label>
                                             <Input
-                                                value={
-                                                    this.props.navigation.state.params.retmeasurements
-                                                        .name
-                                                }
+                                                returnKeyType={"next"}
+                                                onSubmitEditing={() => {
+                                                    this.TextInput2._root.focus();
+                                                }}
+                                                keyboardType="numeric"
+                                                onChangeText={length => this.setMesurements("length", length)}
+                                            // value={`${this.state.measurements.length}`}
                                             />
                                         </Item>
-
                                         <Item inlineLabel>
-                                            <Label>Contact No</Label>
+                                            <Label>Shoulder</Label>
                                             <Input
-                                                value={
-                                                    this.props.navigation.state.params.retmeasurements
-                                                        .mobile
+                                                returnKeyType={"next"}
+                                                ref={input => {
+                                                    this.TextInput2 = input;
+                                                }}
+                                                onSubmitEditing={() => {
+                                                    this.TextInput3._root.focus();
+                                                }}
+                                                keyboardType="numeric"
+                                                onChangeText={shoulder =>
+                                                    this.setMesurements("shoulder", shoulder)
                                                 }
+                                            // value={`${this.state.measurements.shoulder}`}
                                             />
                                         </Item>
-                                    </CardItem>
-                                </Card>
-                                {this.props.navigation.state.params.sork &&
-                                    this.props.navigation.state.params.enabled &&
-                                    this.state.params.retmeasurements.measurements.shirt ? (
-                                        <CardItem bordered>
-                                            <Body>
-                                                <Item inlineLabel>
-                                                    <Label>Length</Label>
-                                                    <Input
-                                                        value={
-                                                            this.props.navigation.state.params.retmeasurements
-                                                                .measurements.shirt.length
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Shoulder</Label>
-                                                    <Input
-                                                        value={
-                                                            this.props.navigation.state.params.retmeasurements
-                                                                .measurements.shirt.shoulder
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Sleeves</Label>
-                                                    <Input
-                                                        value={
-                                                            this.props.navigation.state.params.retmeasurements
-                                                                .measurements.shirt.sleeves
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Chest</Label>
-                                                    <Input
-                                                        value={
-                                                            this.props.navigation.state.params.retmeasurements
-                                                                .measurements.shirt.chest
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Stomach</Label>
-                                                    <Input
-                                                        value={
-                                                            this.props.navigation.state.params.retmeasurements
-                                                                .measurements.shirt.stomach
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Seat</Label>
-                                                    <Input
-                                                        value={
-                                                            this.props.navigation.state.params.retmeasurements
-                                                                .measurements.shirt.seat
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>FrontFix</Label>
-                                                    <Input
-                                                        value={
-                                                            this.props.navigation.state.params.retmeasurements
-                                                                .measurements.shirt.frontfix
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Collum</Label>
-                                                    <Input
-                                                        value={
-                                                            this.props.navigation.state.params.retmeasurements
-                                                                .measurements.shirt.collom
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Cuff</Label>
-                                                    <Input
-                                                        value={
-                                                            this.props.navigation.state.params.retmeasurements
-                                                                .measurements.shirt.cuff
-                                                        }
-                                                    />
-                                                </Item>
-                                            </Body>
-                                        </CardItem>
-                                    ) : (
-                                        <View />
-                                    )}
-
-                                {this.props.navigation.state.params.sork &&
-                                    this.props.navigation.state.params.enabled &&
-                                    this.props.navigation.state.params.retmeasurements.measurements
-                                        .kurta ? (
-                                        <CardItem bordered>
-                                            <Body>
-                                                <Item inlineLabel>
-                                                    <Label>Length</Label>
-                                                    <Input
-                                                        value={
-                                                            this.state.params.retmeasurements.measurements.kurta
-                                                                .length
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Shoulder</Label>
-                                                    <Input
-                                                        value={
-                                                            this.state.params.retmeasurements.measurements.kurta
-                                                                .shoulder
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Sleeves</Label>
-                                                    <Input
-                                                        value={
-                                                            this.state.params.retmeasurements.measurements.kurta
-                                                                .sleeves
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Chest</Label>
-                                                    <Input
-                                                        value={
-                                                            this.state.params.retmeasurements.measurements.kurta
-                                                                .chest
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Stomach</Label>
-                                                    <Input
-                                                        value={
-                                                            this.state.params.retmeasurements.measurements.kurta
-                                                                .stomach
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Seat</Label>
-                                                    <Input
-                                                        value={
-                                                            this.state.params.retmeasurements.measurements.kurta
-                                                                .seat
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>FrontFix</Label>
-                                                    <Input
-                                                        value={
-                                                            this.state.params.retmeasurements.measurements.kurta
-                                                                .frontfix
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Collum</Label>
-                                                    <Input
-                                                        value={
-                                                            this.state.params.retmeasurements.measurements.kurta
-                                                                .collom
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Cuff</Label>
-                                                    <Input
-                                                        value={
-                                                            this.state.params.retmeasurements.measurements.kurta
-                                                                .cuff
-                                                        }
-                                                    />
-                                                </Item>
-                                            </Body>
-                                        </CardItem>
-                                    ) : (
-                                        <View />
-                                    )}
-
-                                {this.props.navigation.state.params.sork == false &&
-                                    this.props.navigation.state.params.enabled &&
-                                    this.props.navigation.state.params.retmeasurements.measurements
-                                        .jean ? (
-                                        <CardItem bordered>
-                                            <Body>
-                                                <Item inlineLabel>
-                                                    <Label>Length</Label>
-                                                    <Input
-                                                        value={
-                                                            this.props.navigation.state.params.retmeasurements
-                                                                .measurements.jean.length
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Waist</Label>
-                                                    <Input
-                                                        value={
-                                                            this.props.navigation.state.params.retmeasurements
-                                                                .measurements.jean.waist
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Seat</Label>
-                                                    <Input
-                                                        value={
-                                                            this.props.navigation.state.params.retmeasurements
-                                                                .measurements.jean.seat
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Fork</Label>
-                                                    <Input
-                                                        value={
-                                                            this.props.navigation.state.params.retmeasurements
-                                                                .measurements.jean.fork
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Thigh</Label>
-                                                    <Input
-                                                        value={
-                                                            this.props.navigation.state.params.retmeasurements
-                                                                .measurements.jean.thigh
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Knee</Label>
-                                                    <Input
-                                                        value={
-                                                            this.props.navigation.state.params.retmeasurements
-                                                                .measurements.jean.knee
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Bottom</Label>
-                                                    <Input
-                                                        value={
-                                                            this.props.navigation.state.params.retmeasurements
-                                                                .measurements.jean.bottom
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Back Rise</Label>
-                                                    <Input
-                                                        value={
-                                                            this.props.navigation.state.params.retmeasurements
-                                                                .measurements.jean.backrise
-                                                        }
-                                                    />
-                                                </Item>
-                                            </Body>
-                                        </CardItem>
-                                    ) : (
-                                        <View />
-                                    )}
-
-                                {this.props.navigation.state.params.sork == false &&
-                                    this.props.navigation.state.params.enabled &&
-                                    this.props.navigation.state.params.retmeasurements.measurements
-                                        .pant ? (
-                                        <CardItem bordered>
-                                            <Body>
-                                                <Item inlineLabel>
-                                                    <Label>Length</Label>
-                                                    <Input
-                                                        value={
-                                                            this.state.params.retmeasurements.measurements.pant
-                                                                .length
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Waist</Label>
-                                                    <Input
-                                                        value={
-                                                            this.state.params.retmeasurements.measurements.pant
-                                                                .waist
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Seat</Label>
-                                                    <Input
-                                                        value={
-                                                            this.state.params.retmeasurements.measurements.pant
-                                                                .seat
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Fork</Label>
-                                                    <Input
-                                                        value={
-                                                            this.state.params.retmeasurements.measurements.pant
-                                                                .fork
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Thigh</Label>
-                                                    <Input
-                                                        value={
-                                                            this.state.params.retmeasurements.measurements.pant
-                                                                .thigh
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Knee</Label>
-                                                    <Input
-                                                        value={
-                                                            this.state.params.retmeasurements.measurements.pant
-                                                                .knee
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Bottom</Label>
-                                                    <Input
-                                                        value={
-                                                            this.state.params.retmeasurements.measurements.pant
-                                                                .bottom
-                                                        }
-                                                    />
-                                                </Item>
-                                                <Item inlineLabel>
-                                                    <Label>Back Rise</Label>
-                                                    <Input
-                                                        value={
-                                                            this.state.params.retmeasurements.measurements.pant
-                                                                .backrise
-                                                        }
-                                                    />
-                                                </Item>
-                                            </Body>
-                                        </CardItem>
-                                    ) : (
-                                        <View />
-                                    )}
+                                        <Item inlineLabel>
+                                            <Label>Sleeves</Label>
+                                            <Input
+                                                returnKeyType={"next"}
+                                                ref={input => {
+                                                    this.TextInput3 = input;
+                                                }}
+                                                onSubmitEditing={() => {
+                                                    this.TextInput4._root.focus();
+                                                }}
+                                                keyboardType="numeric"
+                                                onChangeText={sleeves => this.setMesurements("sleeves", sleeves)}
+                                            // value={`${this.state.measurements.sleeves}`}
+                                            />
+                                        </Item>
+                                        <Item inlineLabel>
+                                            <Label>Chest</Label>
+                                            <Input
+                                                returnKeyType={"next"}
+                                                ref={input => {
+                                                    this.TextInput4 = input;
+                                                }}
+                                                onSubmitEditing={() => {
+                                                    this.TextInput5._root.focus();
+                                                }}
+                                                keyboardType="numeric"
+                                                onChangeText={chest => this.setMesurements("chest", chest)}
+                                            // value={`${this.state.measurements.chest}`}
+                                            />
+                                        </Item>
+                                        <Item inlineLabel>
+                                            <Label>Stomach</Label>
+                                            <Input
+                                                returnKeyType={"next"}
+                                                ref={input => {
+                                                    this.TextInput5 = input;
+                                                }}
+                                                onSubmitEditing={() => {
+                                                    this.TextInput6._root.focus();
+                                                }}
+                                                keyboardType="numeric"
+                                                onChangeText={stomach => this.setMesurements("stomach", stomach)}
+                                            // value={`${this.state.measurements.stomach}`}
+                                            />
+                                        </Item>
+                                        <Item inlineLabel>
+                                            <Label>Seat</Label>
+                                            <Input
+                                                returnKeyType={"next"}
+                                                ref={input => {
+                                                    this.TextInput6 = input;
+                                                }}
+                                                onSubmitEditing={() => {
+                                                    this.TextInput7._root.focus();
+                                                }}
+                                                keyboardType="numeric"
+                                                onChangeText={seat => this.setMesurements("seat", seat)}
+                                            // value={`${this.state.measurements.seat}`}
+                                            />
+                                        </Item>
+                                        <Item inlineLabel>
+                                            <Label>Frontfix</Label>
+                                            <Input
+                                                returnKeyType={"next"}
+                                                ref={input => {
+                                                    this.TextInput7 = input;
+                                                }}
+                                                onSubmitEditing={() => {
+                                                    this.TextInput8._root.focus();
+                                                }}
+                                                keyboardType="numeric"
+                                                onChangeText={frontfix =>
+                                                    this.setMesurements("frontfix", frontfix)
+                                                }
+                                            // value={`${this.state.measurements.frontfix}`}
+                                            />
+                                        </Item>
+                                        <Item inlineLabel>
+                                            <Label>Collom</Label>
+                                            <Input
+                                                returnKeyType={"next"}
+                                                ref={input => {
+                                                    this.TextInput8 = input;
+                                                }}
+                                                onSubmitEditing={() => {
+                                                    this.TextInput9._root.focus();
+                                                }}
+                                                keyboardType="numeric"
+                                                onChangeText={collom => this.setMesurements("collom", collom)}
+                                            // value={`${this.state.measurements.collom}`}
+                                            />
+                                        </Item>
+                                        <Item inlineLabel>
+                                            <Label>Cuff</Label>
+                                            <Input
+                                                ref={input => {
+                                                    this.TextInput9 = input;
+                                                }}
+                                                keyboardType="numeric"
+                                                onChangeText={cuff => this.setMesurements("cuff", cuff)}
+                                            // value={`${this.state.measurements.cuff}`}
+                                            />
+                                        </Item>
+                                        <Image
+                                            style={{
+                                                height: 200,
+                                                width: 320,
+                                                resizeMode: "stretch"
+                                            }}
+                                            source={item.image}
+                                        />
+                                        <Button block info onPress={() => this.pickImage()}>
+                                            <Text> Upload Image </Text>
+                                        </Button>
+                                        <Button block primary onPress={() => this.saveToDB()}>
+                                            <Text> Submit </Text>
+                                        </Button>
+                                    </Body>
+                                </CardItem>
                             </Card>
-                        )}
-                    />
-                </View>
-                <View
-                    style={{
-                        flexDirection: "row",
-                        flex: 1,
-                        position: "absolute",
-                        bottom: 50,
-                        left: 0,
-                        right: 0,
-                        justifyContent: "space-between",
-                        padding: 15
-                    }}
-                >
-                    <Button iconLeft onPress={() => this._deckSwiper._root.swipeLeft()}>
-                        <Icon name="arrow-back" />
-                        <Text>Swipe Left</Text>
-                    </Button>
-                    <Button iconRight onPress={() => this._deckSwiper._root.swipeRight()}>
-                        <Icon name="arrow-forward" />
-                        <Text>Swipe Right</Text>
-                    </Button>
-                    <Button
-                        iconRight
-                        onPress={() =>
-                            console.log(
-                                this.props.navigation.state.params.retmeasurements.name
-                            )
                         }
-                    >
-                        <Icon name="arrow-forward" />
-                        <Text>Console</Text>
-                    </Button>
+                        keyExtractor={(item, index) => index.toString()}
+                    />
                 </View>
             </Container>
         );
