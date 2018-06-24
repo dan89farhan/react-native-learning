@@ -9,11 +9,13 @@ class ResultForSork extends Component {
 
     constructor(props) {
         super(props)
-        alert('in Result for sork ' + JSON.stringify(this.props.measurements))
+        // alert('in Result for sork ' + JSON.stringify(this.props.measurements))
         this.state = {
             measurements: this.props.measurements,
-            clothType: this.props.clothType
+            clothType: this.props.clothType,
+            imageURL: this.props.imageURL
         }
+        // alert('imageURL ' + JSON.stringify(this.state.imageURL))
     }
 
     render() {
@@ -164,9 +166,9 @@ class ResultForSork extends Component {
                             style={{
                                 height: 200,
                                 width: 320,
-                                resizeMode: "stretch"
+                                // resizeMode: "stretch"
                             }}
-                        // source={item.image}
+                            source={{ uri: this.state.imageURL }}
                         />
                         <Button block info onPress={() => this.pickImage()}>
                             <Text> Upload Image </Text>

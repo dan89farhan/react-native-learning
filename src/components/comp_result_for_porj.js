@@ -12,7 +12,8 @@ class ResultForPorJ extends Component {
         alert('in Result for porj ' + JSON.stringify(this.props.measurements))
         this.state = {
             measurements: this.props.measurements,
-            clothType: this.props.clothType
+            clothType: this.props.clothType,
+            imageURL: this.props.imageURL
         }
     }
 
@@ -146,9 +147,9 @@ class ResultForPorJ extends Component {
                             style={{
                                 height: 200,
                                 width: 320,
-                                resizeMode: "stretch"
+                                // resizeMode: "stretch"
                             }}
-                            source={{ uri: this.state.imageUrl }}
+                            source={{ uri: this.state.imageURL }}
                         />
                         <Button block info onPress={() => this.pickImage()}>
                             <Text> Upload Image </Text>

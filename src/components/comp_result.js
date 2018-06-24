@@ -58,46 +58,47 @@ export default class SearchResults extends Component {
             ],
 
             measurementsType: [],
+            imageURL: []
 
         }
     }
     componentWillMount() {
         const { navigation } = this.props;
         const measurement = navigation.getParam('measurements', 'NO-measurements');
-        const basicInfo = navigation.getParam('basicInfo', { name: 'error', gender: 'error', mobile: 'error' })
+        const info = navigation.getParam('basicInfo', { name: 'error', gender: 'error', mobile: 'error' })
+        const images = navigation.getParam('imageURL', [{ 'image_url': 'vollrath.com/ClientCss/images/VollrathImages/No_Image_Available.jpg' }])
 
-        // alert('basic info result' + JSON.stringify(basicInfo))
+        // alert('basic info result' + JSON.stringify(info))
         // alert('measurements ' + JSON.stringify(measurement))
 
+        // alert('images result' + JSON.stringify(images))
 
-        // this.state.measurements.push(measurement);
-        // this.setState({
-        //     measurements: measurement
-        // })
+
+
+
         this.state.measurements = measurement
-        // this.state.measurements.forEach((element, index) => {
-        //     for (var key in element) {
+
+        this.state.measurements.forEach((element, index) => {
+            for (var key in element) {
 
 
-        //         this.state.measurementsType.push(key)
-        //         // alert('first prop ' + index + ' ' + JSON.stringify(this.state.measurementsType[0]))
-        //         // break;
+                this.state.measurementsType.push(key)
+                // alert('first prop ' + index + ' ' + JSON.stringify(this.state.measurementsType[0]))
+                // break;
 
-        //     }
-        // });
-        // this.setState({
-        //     basicInfo: basicInfo
-        // })
-        alert('basic Info ' + typeof this.state.basicInfo)
+            }
+        });
+
+        this.setState({
+            imageURL: images
+        })
+        this.state.basicInfo = info;
+
+
+
     }
     componentDidMount() {
-        // this.state.measurements.shift()
 
-
-
-
-
-        // alert('in render measurements ' + JSON.stringify(this.state.measurements))
     }
 
     render() {
@@ -109,43 +110,55 @@ export default class SearchResults extends Component {
 
             < Container >
                 <Header />
-                <View>
-                    <FlatList
-                        data={this.state.measurements}
-                        renderItem={({ item, index }) =>
-                            <Card style={{ elevation: 3 }}>
-                                <CardItem>
-                                    <Left>
-                                        {/* <Thumbnail source={item.image} /> */}
-                                        <Body>
-                                            <Text>{this.state.basicInfo.name}</Text>
-                                            <Text note>{this.state.basicInfo.gender}</Text>
-                                        </Body>
-                                    </Left>
-                                </CardItem>
-                                <CardItem cardBody>
-                                    {/* <Image style={{ height: 300, flex: 1 }} source={item.image} /> */}
-                                </CardItem>
-                                <CardItem>
-                                    <Icon name="call" style={{ color: '#ED4A6A' }} />
-                                    <Text>{this.state.basicInfo.mobile}</Text>
-                                </CardItem>
-                                {/* {
 
-                                    this.state.measurementsType[0] == 'shirt' || this.state.measurementsType[0] == 'kurta' ? (
-                                        <ResultForSork
-                                            measurements={item}
-                                            clothType={this.state.measurementsType[index]} />
-                                    ) : (
-                                            <ResultForPorJ measurements={item}
-                                                clothType={this.state.measurementsType[index]} />
+                <CardItem>
+                    <Left>
+                        {/* <Thumbnail source={item.image} /> */}
+                        <Body>
+                            <Text>{this.state.basicInfo.name}</Text>
+                            <Text note>{this.state.basicInfo.gender}</Text>
+                        </Body>
+                    </Left>
+                </CardItem>
+                <CardItem cardBody>
+                    {/* <Image style={{ height: 300, flex: 1 }} source={item.image} /> */}
+                </CardItem>
+                <CardItem>
+                    <Icon name="call" style={{ color: '#ED4A6A' }} />
+                    <Text>{this.state.basicInfo.mobile}</Text>
+                </CardItem>
+                <FlatList
+                    data={this.state.measurements}
+                    renderItem={({ item, index }) =>
+                        <Card style={{ elevation: 3 }}>
+
+                            {
+
+                                this.state.measurementsType[index] == 'shirt' ? (
+                                    <ResultForSork
+                                        measurements={item}
+                                        clothType={this.state.measurementsType[index]}
+                                        imageURL={this.state.imageURL[index]} />
+                                ) : this.state.measurementsType[index] == 'kurta' ? (
+                                    <ResultForSork
+                                        measurements={item}
+                                        clothType={this.state.measurementsType[index]}
+                                        imageURL={this.state.imageURL[index]}
+                                    />
+
+                                ) : (
+                                            <ResultForPorJ
+                                                measurements={item}
+                                                clothType={this.state.measurementsType[index]}
+                                                imageURL={this.state.imageURL[index]}
+                                            />
                                         )
-                                } */}
-                            </Card>
-                        }
-                        keyExtractor={(item, index) => index.toString()}
-                    />
-                </View>
+                            }
+                        </Card>
+                    }
+                    keyExtractor={(item, index) => index.toString()}
+                />
+
             </Container >
         );
     }
