@@ -15,7 +15,8 @@ firebase.initializeApp(config);
 //Handle Firebase warning
 console.ignoredYellowBox = [
   "Setting a timer for a long period of time",
-  "Possible Unhandled Promise Rejection"
+  "Possible Unhandled Promise Rejection",
+  'Using an unspecified index'
 ];
 
 AppRegistry.registerComponent("Fragementation", () => App);

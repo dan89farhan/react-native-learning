@@ -35,7 +35,7 @@ export default class InlineLabelExample extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: "orderno",
+      selected: "name",
       enabled: false,
       loading: true,
       Sork: true,
@@ -43,7 +43,7 @@ export default class InlineLabelExample extends Component {
       name: null,
       orderno: null,
       contactno: null,
-      searchstring: '1',
+      searchstring: 'abc',
       basicInfo: {},
       clothType: {},
       order: {}
@@ -100,50 +100,7 @@ export default class InlineLabelExample extends Component {
 
       var searchquery = null;
       switch (this.state.selected) {
-        case 'name':
 
-          var result = null;
-          searchquery = this.state.searchstring;
-
-          var totalresult = [];
-          recentPostsRef
-            .orderByChild("name")
-            .equalTo(searchquery)
-            .on("value", snapshot => {
-              snapshot.forEach(function (child) {
-                console.log(child.key);
-                result = child.key;
-                totalresult.push(child.key);
-              });
-            });
-
-          recentPostsRef.child(result).on("value", snapshot => {
-            this.setState({ measurements: snapshot.val() });
-            console.log(snapshot.val());
-            console.log(totalresult.length);
-            snapshot.forEach(function (data) {
-              // console.log(data.key);
-            });
-
-            if (
-              snapshot.child("measurements/shirt").exists() ||
-              snapshot.child("measurements/kurta").exists()
-            ) {
-              this.setState({
-                sork: true
-              });
-            } else {
-              this.setState({
-                sork: false
-              });
-            }
-            this.setState({
-              enabled: true
-            });
-
-            this._setstatenull();
-            this.props.navigation.navigate("Results", this.state);
-          });
         case 'contactno':
 
           searchquery = this.state.searchstring;
@@ -192,35 +149,38 @@ export default class InlineLabelExample extends Component {
 
           alert('in order' + this.state.searchstring);
           searchquery = this.state.searchstring;
-          recentPostsRef.child(searchquery).on("value", snapshot => {
+          recentPostsRef.child(searchquery).once("value", snapshot => {
 
             // console.log(snapshot.val());
-            const result = snapshot.val();
+            let result = [];
+            result.push(snapshot.val().measurements);
+            const results = snapshot.val();
+            // alert('result ' + JSON.stringify(result))
             if (result && result != null) {
-              this.setState({ measurements: snapshot.val().measurements });
-              alert('measuremnets ' + JSON.stringify(this.state.measurements));
+              this.setState({ measurements: result });
+
+              this.setState({
+                basicInfo: {
+                  name: results.name,
+                  gender: results.gender,
+                  mobile: results.mobile
+                }
+              })
+              // alert('basic info ' + JSON.stringify(this.state.basicInfo));
               snapshot.forEach(function (data) {
                 // console.log(data.key);
               });
 
-              // if (
-              //   snapshot.child("measurements/shirt").exists() ||
-              //   snapshot.child("measurements/kurta").exists()
-              // ) {
-              //   this.setState({
-              //     sork: true
-              //   });
-              // } else {
-              //   this.setState({
-              //     sork: false
-              //   });
-              // }
-              // this.setState({
-              //   enabled: true
-              // });
+
 
               this._setstatenull();
-              this.props.navigation.navigate("Result", { measurements: this.state.measurements });
+              this.props.navigation.push("Result",
+                {
+                  measurements: this.state.measurements,
+                  basicInfo: this.state.basicInfo
+                }
+
+              );
 
             }
 
@@ -228,6 +188,85 @@ export default class InlineLabelExample extends Component {
           });
 
 
+          break;
+        case 'name':
+
+          let result = null;
+          searchquery = this.state.searchstring;
+
+          let totalresult = [];
+
+          let basicInfo = {};
+
+          recentPostsRef
+            .orderByChild("name")
+            .equalTo(searchquery)
+            .once("value", snapshot => {
+              // alert('snapshot ' + JSON.stringify(snapshot))
+              snapshot.forEach(function (val) {
+                // console.log(child.key);
+                // result = val.key;
+                totalresult.push(val.child('measurements'));
+
+              });
+              snapshot.forEach(function (val) {
+                // console.log(child.key);
+                // result = val.key;
+                // totalresult.push(val.child('measurements'));
+                basicInfo['name'] = val.child('name');
+                basicInfo['gender'] = val.child('gender');
+                basicInfo['mobile'] = val.child('mobile');
+
+              });
+              this.setState({
+                basicInfo: basicInfo,
+                measurements: totalresult
+              })
+              // alert('basic Info' + JSON.stringify(this.state.basicInfo))
+              // alert('measurements ' + JSON.stringify(this.state.measurements))
+
+              this._setstatenull();
+              this.props.navigation.push("Result",
+                {
+                  measurements: this.state.measurements,
+                  basicInfo: this.state.basicInfo
+                }
+
+              );
+
+              // alert('measurements ' + JSON.stringify(totalresult))
+
+            });
+
+
+
+          // recentPostsRef.child(result).on("value", snapshot => {
+          //   this.setState({ measurements: snapshot.val() });
+          //   console.log(snapshot.val());
+          //   console.log(totalresult.length);
+          //   snapshot.forEach(function (data) {
+          //     // console.log(data.key);
+          //   });
+
+          //   if (
+          //     snapshot.child("measurements/shirt").exists() ||
+          //     snapshot.child("measurements/kurta").exists()
+          //   ) {
+          //     this.setState({
+          //       sork: true
+          //     });
+          //   } else {
+          //     this.setState({
+          //       sork: false
+          //     });
+          //   }
+          //   this.setState({
+          //     enabled: true
+          //   });
+
+          //   this._setstatenull();
+          //   this.props.navigation.navigate("Results", this.state);
+          // });
           break;
         default:
           alert('please enter a valid query.' + this.state.selected);

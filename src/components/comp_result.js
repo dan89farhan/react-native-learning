@@ -17,6 +17,8 @@ import {
     Input
 } from "native-base";
 import { Image, FlatList } from 'react-native';
+import ResultForSork from './comp_result_for_sork';
+import ResultForPorJ from './comp_result_for_porj';
 
 const cards = [
     // {
@@ -36,214 +38,115 @@ export default class SearchResults extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            basicInfo: {},
             measurements: [
 
+                {
+                    shirt: {
+                        chest: 100,
+                        collom: 100,
+                        cuff: 100,
+                        frontfix: 100,
+                        length: 100,
+                        seat: 100,
+                        shoulder: 100,
+                        sleeves: 100,
+                        stomach: 100,
+                    }
+                }
+
             ],
-            temp: false
+
+            measurementsType: [],
+
         }
     }
-    componentDidMount() {
-        // this.state.measurements.push( this.props.measurements) 
+    componentWillMount() {
         const { navigation } = this.props;
-        const measurements = navigation.getParam('measurements', 'NO-measurements');
+        const measurement = navigation.getParam('measurements', 'NO-measurements');
+        const basicInfo = navigation.getParam('basicInfo', { name: 'error', gender: 'error', mobile: 'error' })
 
-        this.state.measurements.push(measurements)
-        this.state.measurements.push(measurements)
-        this.setState({
-            temp: false
-        })
-        this.forceUpdate()
-        // alert('measurements ' + JSON.stringify(this.state.measurements))
-        console.log('measurements ', this.state.measurements);
+        // alert('basic info result' + JSON.stringify(basicInfo))
+        // alert('measurements ' + JSON.stringify(measurement))
 
-        // this.setState({ measurements: measurements })
-        // const otherParam = navigation.getParam('otherParam', 'some default value');
 
+        // this.state.measurements.push(measurement);
+        // this.setState({
+        //     measurements: measurement
+        // })
+        this.state.measurements = measurement
+        // this.state.measurements.forEach((element, index) => {
+        //     for (var key in element) {
+
+
+        //         this.state.measurementsType.push(key)
+        //         // alert('first prop ' + index + ' ' + JSON.stringify(this.state.measurementsType[0]))
+        //         // break;
+
+        //     }
+        // });
+        // this.setState({
+        //     basicInfo: basicInfo
+        // })
+        alert('basic Info ' + typeof this.state.basicInfo)
+    }
+    componentDidMount() {
+        // this.state.measurements.shift()
+
+
+
+
+
+        // alert('in render measurements ' + JSON.stringify(this.state.measurements))
     }
 
     render() {
-        console.log('in render measurements ', this.state.measurements);
+        // console.log('in render measurements ', this.state.measurements);
+        // alert('in render measurements ' + JSON.stringify(this.state.basicInfo.name))
+
+
         return (
-            <Container>
+
+            < Container >
                 <Header />
                 <View>
                     <FlatList
                         data={this.state.measurements}
-                        renderItem={({ item }) =>
+                        renderItem={({ item, index }) =>
                             <Card style={{ elevation: 3 }}>
-                                {/* <CardItem>
+                                <CardItem>
                                     <Left>
-                                        <Thumbnail source={item.image} />
+                                        {/* <Thumbnail source={item.image} /> */}
                                         <Body>
-                                            <Text>{item.text}</Text>
-                                            <Text note>NativeBase</Text>
+                                            <Text>{this.state.basicInfo.name}</Text>
+                                            <Text note>{this.state.basicInfo.gender}</Text>
                                         </Body>
                                     </Left>
                                 </CardItem>
                                 <CardItem cardBody>
-                                    <Image style={{ height: 300, flex: 1 }} source={item.image} />
+                                    {/* <Image style={{ height: 300, flex: 1 }} source={item.image} /> */}
                                 </CardItem>
                                 <CardItem>
-                                    <Icon name="heart" style={{ color: '#ED4A6A' }} />
-                                    <Text>{item.name}</Text>
-                                </CardItem> */}
-
-                                <CardItem bordered>
-                                    <Body>
-                                        <Item inlineLabel>
-                                            <Label>Length</Label>
-                                            <Input
-                                                returnKeyType={"next"}
-                                                onSubmitEditing={() => {
-                                                    this.TextInput2._root.focus();
-                                                }}
-                                                keyboardType="numeric"
-                                                onChangeText={length => this.setMesurements("length", length)}
-                                            // value={`${this.state.measurements.length}`}
-                                            />
-                                        </Item>
-                                        <Item inlineLabel>
-                                            <Label>Shoulder</Label>
-                                            <Input
-                                                returnKeyType={"next"}
-                                                ref={input => {
-                                                    this.TextInput2 = input;
-                                                }}
-                                                onSubmitEditing={() => {
-                                                    this.TextInput3._root.focus();
-                                                }}
-                                                keyboardType="numeric"
-                                                onChangeText={shoulder =>
-                                                    this.setMesurements("shoulder", shoulder)
-                                                }
-                                            // value={`${this.state.measurements.shoulder}`}
-                                            />
-                                        </Item>
-                                        <Item inlineLabel>
-                                            <Label>Sleeves</Label>
-                                            <Input
-                                                returnKeyType={"next"}
-                                                ref={input => {
-                                                    this.TextInput3 = input;
-                                                }}
-                                                onSubmitEditing={() => {
-                                                    this.TextInput4._root.focus();
-                                                }}
-                                                keyboardType="numeric"
-                                                onChangeText={sleeves => this.setMesurements("sleeves", sleeves)}
-                                            // value={`${this.state.measurements.sleeves}`}
-                                            />
-                                        </Item>
-                                        <Item inlineLabel>
-                                            <Label>Chest</Label>
-                                            <Input
-                                                returnKeyType={"next"}
-                                                ref={input => {
-                                                    this.TextInput4 = input;
-                                                }}
-                                                onSubmitEditing={() => {
-                                                    this.TextInput5._root.focus();
-                                                }}
-                                                keyboardType="numeric"
-                                                onChangeText={chest => this.setMesurements("chest", chest)}
-                                            // value={`${this.state.measurements.chest}`}
-                                            />
-                                        </Item>
-                                        <Item inlineLabel>
-                                            <Label>Stomach</Label>
-                                            <Input
-                                                returnKeyType={"next"}
-                                                ref={input => {
-                                                    this.TextInput5 = input;
-                                                }}
-                                                onSubmitEditing={() => {
-                                                    this.TextInput6._root.focus();
-                                                }}
-                                                keyboardType="numeric"
-                                                onChangeText={stomach => this.setMesurements("stomach", stomach)}
-                                            // value={`${this.state.measurements.stomach}`}
-                                            />
-                                        </Item>
-                                        <Item inlineLabel>
-                                            <Label>Seat</Label>
-                                            <Input
-                                                returnKeyType={"next"}
-                                                ref={input => {
-                                                    this.TextInput6 = input;
-                                                }}
-                                                onSubmitEditing={() => {
-                                                    this.TextInput7._root.focus();
-                                                }}
-                                                keyboardType="numeric"
-                                                onChangeText={seat => this.setMesurements("seat", seat)}
-                                            // value={`${this.state.measurements.seat}`}
-                                            />
-                                        </Item>
-                                        <Item inlineLabel>
-                                            <Label>Frontfix</Label>
-                                            <Input
-                                                returnKeyType={"next"}
-                                                ref={input => {
-                                                    this.TextInput7 = input;
-                                                }}
-                                                onSubmitEditing={() => {
-                                                    this.TextInput8._root.focus();
-                                                }}
-                                                keyboardType="numeric"
-                                                onChangeText={frontfix =>
-                                                    this.setMesurements("frontfix", frontfix)
-                                                }
-                                            // value={`${this.state.measurements.frontfix}`}
-                                            />
-                                        </Item>
-                                        <Item inlineLabel>
-                                            <Label>Collom</Label>
-                                            <Input
-                                                returnKeyType={"next"}
-                                                ref={input => {
-                                                    this.TextInput8 = input;
-                                                }}
-                                                onSubmitEditing={() => {
-                                                    this.TextInput9._root.focus();
-                                                }}
-                                                keyboardType="numeric"
-                                                onChangeText={collom => this.setMesurements("collom", collom)}
-                                            // value={`${this.state.measurements.collom}`}
-                                            />
-                                        </Item>
-                                        <Item inlineLabel>
-                                            <Label>Cuff</Label>
-                                            <Input
-                                                ref={input => {
-                                                    this.TextInput9 = input;
-                                                }}
-                                                keyboardType="numeric"
-                                                onChangeText={cuff => this.setMesurements("cuff", cuff)}
-                                            // value={`${this.state.measurements.cuff}`}
-                                            />
-                                        </Item>
-                                        <Image
-                                            style={{
-                                                height: 200,
-                                                width: 320,
-                                                resizeMode: "stretch"
-                                            }}
-                                            source={item.image}
-                                        />
-                                        <Button block info onPress={() => this.pickImage()}>
-                                            <Text> Upload Image </Text>
-                                        </Button>
-                                        <Button block primary onPress={() => this.saveToDB()}>
-                                            <Text> Submit </Text>
-                                        </Button>
-                                    </Body>
+                                    <Icon name="call" style={{ color: '#ED4A6A' }} />
+                                    <Text>{this.state.basicInfo.mobile}</Text>
                                 </CardItem>
+                                {/* {
+
+                                    this.state.measurementsType[0] == 'shirt' || this.state.measurementsType[0] == 'kurta' ? (
+                                        <ResultForSork
+                                            measurements={item}
+                                            clothType={this.state.measurementsType[index]} />
+                                    ) : (
+                                            <ResultForPorJ measurements={item}
+                                                clothType={this.state.measurementsType[index]} />
+                                        )
+                                } */}
                             </Card>
                         }
                         keyExtractor={(item, index) => index.toString()}
                     />
                 </View>
-            </Container>
+            </Container >
         );
     }
 }
