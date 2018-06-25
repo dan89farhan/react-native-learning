@@ -51,9 +51,6 @@ class MeasurementsForSorK extends Component {
 
   setMesurements(key, value) {
     this.state.measurements[key] = value;
-    // console.log("measurements ", this.state.measurements);
-    // console.log("basic info ", this.state.basicInfo);
-    // console.log("Cloth type ", this.state.clothType);
     console.log("order ", this.state.order);
   }
 

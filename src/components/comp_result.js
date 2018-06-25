@@ -58,7 +58,8 @@ export default class SearchResults extends Component {
             ],
 
             measurementsType: [],
-            imageURL: []
+            imageURL: [],
+            orderID: []
 
         }
     }
@@ -66,10 +67,11 @@ export default class SearchResults extends Component {
         const { navigation } = this.props;
         const measurement = navigation.getParam('measurements', 'NO-measurements');
         const info = navigation.getParam('basicInfo', { name: 'error', gender: 'error', mobile: 'error' })
-        const images = navigation.getParam('imageURL', [{ 'image_url': 'vollrath.com/ClientCss/images/VollrathImages/No_Image_Available.jpg' }])
+        const images = navigation.getParam('imageURL', [{ 'image_url': 'http://vollrath.com/ClientCss/images/VollrathImages/No_Image_Available.jpg' }])
+        const orderID = navigation.getParam('orderID', ['no orderID']);
 
         // alert('basic info result' + JSON.stringify(info))
-        // alert('measurements ' + JSON.stringify(measurement))
+        alert('measurements ' + JSON.stringify(measurement))
 
         // alert('images result' + JSON.stringify(images))
 
@@ -80,22 +82,15 @@ export default class SearchResults extends Component {
 
         this.state.measurements.forEach((element, index) => {
             for (var key in element) {
-
-
                 this.state.measurementsType.push(key)
-                // alert('first prop ' + index + ' ' + JSON.stringify(this.state.measurementsType[0]))
-                // break;
-
             }
         });
 
         this.setState({
-            imageURL: images
+            imageURL: images,
+            orderID: orderID
         })
         this.state.basicInfo = info;
-
-
-
     }
     componentDidMount() {
 
@@ -130,7 +125,7 @@ export default class SearchResults extends Component {
                 <FlatList
                     data={this.state.measurements}
                     renderItem={({ item, index }) =>
-                        <Card style={{ elevation: 3 }}>
+                        <View >
 
                             {
 
@@ -138,12 +133,18 @@ export default class SearchResults extends Component {
                                     <ResultForSork
                                         measurements={item}
                                         clothType={this.state.measurementsType[index]}
-                                        imageURL={this.state.imageURL[index]} />
+                                        imageURL={this.state.imageURL[index]}
+                                        orderID={this.state.orderID[index]}
+                                        basicInfo={this.state.basicInfo}
+                                    />
+
                                 ) : this.state.measurementsType[index] == 'kurta' ? (
                                     <ResultForSork
                                         measurements={item}
                                         clothType={this.state.measurementsType[index]}
                                         imageURL={this.state.imageURL[index]}
+                                        orderID={this.state.orderID[index]}
+                                        basicInfo={this.state.basicInfo}
                                     />
 
                                 ) : (
@@ -151,10 +152,12 @@ export default class SearchResults extends Component {
                                                 measurements={item}
                                                 clothType={this.state.measurementsType[index]}
                                                 imageURL={this.state.imageURL[index]}
+                                                orderID={this.state.orderID[index]}
+                                                basicInfo={this.state.basicInfo}
                                             />
                                         )
                             }
-                        </Card>
+                        </View>
                     }
                     keyExtractor={(item, index) => index.toString()}
                 />

@@ -31,7 +31,7 @@ export default class InlineLabelExample extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: "mobile",
+      selected: "name",
       enabled: false,
       loading: true,
       Sork: true,
@@ -39,10 +39,10 @@ export default class InlineLabelExample extends Component {
       name: null,
       orderno: null,
       contactno: null,
-      searchstring: '111',
+      searchstring: 'q',
       basicInfo: {},
       clothType: {},
-      order: {}
+      orderID: []
     };
   }
 
@@ -56,20 +56,7 @@ export default class InlineLabelExample extends Component {
   // }
 
   UNSAFE_componentWillMount() {
-    this.setState({
-      basicInfo: {
-        name: "",
-        mobile: "",
-        gender: ""
-      },
-      clothType: {
-        type: "shirt"
-      },
-      order: {
-        orderID: 0,
-        orderIDError: false
-      }
-    });
+
   }
 
   _setstatenull() {
@@ -82,17 +69,9 @@ export default class InlineLabelExample extends Component {
 
   async _handlepress() {
     try {
-      // const Data = await db.database().ref("/orders");
-      // const queryrep = await Data.orderByValue().equalTo("1");
-      // Toast.show(queryrep);
-      // console.log(queryrep);
+
       var recentPostsRef = await db.database().ref("/orders");
-      // recentPostsRef.once("value").then(snapshot => {
-      //   console.log(snapshot.val());
-      //   console.log(snapshot.toJSON());
-      //   console.log(snapshot.key);
-      //   console.log(snapshot.child("1").val());
-      // });
+
 
       var searchquery = null;
       switch (this.state.selected) {
@@ -112,7 +91,13 @@ export default class InlineLabelExample extends Component {
             const results = snapshot.val();
             // alert('result ' + JSON.stringify(result))
             if (result && result != null) {
-              this.setState({ measurements: result });
+              this.setState(
+                { measurements: result },
+
+              );
+              this.setState(prevState => (
+                { orderID: [...prevState.orderID, searchquery] }
+              ))
 
               this.setState({
                 basicInfo: {
@@ -124,16 +109,14 @@ export default class InlineLabelExample extends Component {
 
 
 
-
+              // alert('orderID ' + JSON.stringify(this.state.orderID))
               this._setstatenull();
-              this.props.navigation.push("Result",
-                {
-                  measurements: this.state.measurements,
-                  basicInfo: this.state.basicInfo,
-                  imageURL: orderImageURL
-                }
-
-              );
+              this.props.navigation.push("Result", {
+                measurements: this.state.measurements,
+                basicInfo: this.state.basicInfo,
+                imageURL: orderImageURL,
+                orderID: this.state.orderID
+              });
 
             }
 
@@ -151,6 +134,7 @@ export default class InlineLabelExample extends Component {
 
           let basicInfo = {};
           let nameImageURL = [];
+          let nameOrderID = [];
 
           recentPostsRef
             .orderByChild("name")
@@ -162,6 +146,7 @@ export default class InlineLabelExample extends Component {
                 // result = val.key;
                 totalresult.push(val.child('measurements').val());
                 nameImageURL.push(val.child('image_url').val());
+                nameOrderID.push(val.key);
 
               });
               snapshot.forEach(function (val) {
@@ -187,7 +172,8 @@ export default class InlineLabelExample extends Component {
                 {
                   measurements: this.state.measurements,
                   basicInfo: this.state.basicInfo,
-                  imageURL: nameImageURL
+                  imageURL: nameImageURL,
+                  orderID: nameOrderID
                 });
 
               // alert('measurements ' + JSON.stringify(totalresult))
@@ -209,6 +195,7 @@ export default class InlineLabelExample extends Component {
 
           let mobileBasicInfo = {};
           let mobileImageURL = [];
+          let mobileOrderID = [];
 
           recentPostsRef
             .orderByChild("mobile")
@@ -220,6 +207,7 @@ export default class InlineLabelExample extends Component {
                 // result = val.key;
                 mobileTotalresult.push(val.child('measurements').val());
                 mobileImageURL.push(val.child('image_url').val());
+                mobileOrderID.push(val.key);
               });
               snapshot.forEach(function (val) {
                 // console.log(child.key);
@@ -243,7 +231,8 @@ export default class InlineLabelExample extends Component {
                 {
                   measurements: this.state.measurements,
                   basicInfo: this.state.basicInfo,
-                  imageURL: mobileImageURL
+                  imageURL: mobileImageURL,
+                  orderID: mobileOrderID
                 });
 
               // alert('measurements ' + JSON.stringify(mobileTotalresult))

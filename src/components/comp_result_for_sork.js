@@ -13,14 +13,63 @@ class ResultForSork extends Component {
         this.state = {
             measurements: this.props.measurements,
             clothType: this.props.clothType,
-            imageURL: this.props.imageURL
+            imageURL: this.props.imageURL,
+            orderID: this.props.orderID,
+            basicInfo: this.props.basicInfo
         }
         // alert('imageURL ' + JSON.stringify(this.state.imageURL))
     }
 
+    saveToDB() {
+        let orderID = this.state.orderID;
+        // alert("orderIDError is " + JSON.stringify(this.state.order));
+        console.log("Order status ", this.state.order);
+        try {
+            this.setState(
+                {
+
+                },
+                () => {
+                    let dbCon = db.database().ref("/orders/" + orderID);
+
+                    alert('measurements ' + JSON.stringify(this.state.measurements))
+                    // let obj = this.state.measurements;
+
+                    let obj = {};
+
+                    obj = this.state.basicInfo;
+                    obj["measurements"] = this.state.measurements;
+                    obj["image_url"] = 'success';
+                    dbCon.set(obj);
+                    // console.log("obj info ", obj);
+                    alert("Successfully uploading the data to the server");
+                }
+            );
+        } catch (error) {
+            alert(
+                "Check your internet connection or give me permission to internet access " +
+                error
+            );
+        }
+
+
+    }
+
+    setMesurements(key, value) {
+
+        this.state.measurements[this.state.clothType][key] = value;
+        let temp = this.state.measurements;
+        this.setState({
+            measurements: temp
+        })
+        // console.log("order ", this.state.order);
+        // alert('measurements ' + JSON.stringify(this.state.measurements))
+    }
+
+
     render() {
         return (
-            <Container>
+            <Card>
 
                 <CardItem>
                     <Icon name="heart" style={{ color: '#ED4A6A' }} />
@@ -29,6 +78,9 @@ class ResultForSork extends Component {
                 </CardItem>
                 <CardItem bordered>
                     <Body>
+                        <CardItem>
+                            <Text>Order ID {this.state.orderID}</Text>
+                        </CardItem>
                         <Item inlineLabel>
                             <Label>Length</Label>
                             <Input
@@ -162,14 +214,16 @@ class ResultForSork extends Component {
                                 value={`${this.state.measurements[this.state.clothType].cuff}`}
                             />
                         </Item>
-                        <Image
-                            style={{
-                                height: 200,
-                                width: 320,
-                                // resizeMode: "stretch"
-                            }}
-                            source={{ uri: this.state.imageURL }}
-                        />
+                        <CardItem>
+                            <Image
+                                style={{
+                                    height: 200,
+                                    width: 320,
+                                    resizeMode: "stretch"
+                                }}
+                                source={{ uri: this.state.imageURL }}
+                            />
+                        </CardItem>
                         <Button block info onPress={() => this.pickImage()}>
                             <Text> Upload Image </Text>
                         </Button>
@@ -178,7 +232,7 @@ class ResultForSork extends Component {
                         </Button>
                     </Body>
                 </CardItem>
-            </Container>
+            </Card>
         )
     }
 
