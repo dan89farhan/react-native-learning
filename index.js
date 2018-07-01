@@ -19,4 +19,4 @@ console.ignoredYellowBox = [
   'Using an unspecified index'
 ];
 
-AppRegistry.registerComponent("Fragementation", () => App);
+AppRegistry.registerComponent("MaxTailor", () => App);

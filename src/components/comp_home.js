@@ -109,7 +109,7 @@ export default class StackedLabelExample extends Component {
           this.state.order.orderIDError = false;
 
 
-          alert("key " + JSON.stringify(snapshot.val()));
+          // alert("key " + JSON.stringify(snapshot.val()));
           this.forceUpdate();
         }
       });

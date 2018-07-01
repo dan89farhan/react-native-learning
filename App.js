@@ -20,7 +20,7 @@ const RootStack = createStackNavigator(
     }
   },
   {
-    initialRouteName: "Manage",
+    initialRouteName: "Home",
     headerMode: "none"
   }
 );

@@ -31,7 +31,7 @@ export default class InlineLabelExample extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: "name",
+      selected: "orderno",
       enabled: false,
       loading: true,
       Sork: true,
@@ -39,7 +39,7 @@ export default class InlineLabelExample extends Component {
       name: null,
       orderno: null,
       contactno: null,
-      searchstring: 'q',
+      searchstring: '',
       basicInfo: {},
       clothType: {},
       orderID: []
@@ -79,7 +79,7 @@ export default class InlineLabelExample extends Component {
 
         case 'orderno':
 
-          alert('in order' + this.state.searchstring);
+          // alert('in order' + this.state.searchstring);
           searchquery = this.state.searchstring;
           recentPostsRef.child(searchquery).once("value", snapshot => {
 

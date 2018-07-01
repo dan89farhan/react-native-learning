@@ -32,7 +32,7 @@ class ResultForSork extends Component {
                 () => {
                     let dbCon = db.database().ref("/orders/" + orderID);
 
-                    alert('measurements ' + JSON.stringify(this.state.measurements))
+                    // alert('measurements ' + JSON.stringify(this.state.measurements))
                     // let obj = this.state.measurements;
 
                     let obj = {};

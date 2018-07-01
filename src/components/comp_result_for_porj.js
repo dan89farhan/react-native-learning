@@ -31,7 +31,7 @@ class ResultForPorJ extends Component {
                 () => {
                     let dbCon = db.database().ref("/orders/" + orderID);
 
-                    alert('measurements ' + JSON.stringify(this.state.measurements))
+                    // alert('measurements ' + JSON.stringify(this.state.measurements))
                     let obj = {};
                     obj = this.state.basicInfo;
                     obj["measurements"] = this.state.measurements;

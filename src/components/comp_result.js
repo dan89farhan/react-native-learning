@@ -71,7 +71,7 @@ export default class SearchResults extends Component {
         const orderID = navigation.getParam('orderID', ['no orderID']);
 
         // alert('basic info result' + JSON.stringify(info))
-        alert('measurements ' + JSON.stringify(measurement))
+        // alert('measurements ' + JSON.stringify(measurement))
 
         // alert('images result' + JSON.stringify(images))
 

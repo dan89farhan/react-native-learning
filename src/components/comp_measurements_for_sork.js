@@ -51,6 +51,9 @@ class MeasurementsForSorK extends Component {
 
   setMesurements(key, value) {
     this.state.measurements[key] = value;
+    this.setState({
+      measurements: this.state.measurements
+    })
     console.log("order ", this.state.order);
   }
 
@@ -65,7 +68,7 @@ class MeasurementsForSorK extends Component {
     if (orderIDError == true) {
       this.uploadImage(uri, orderID)
         .then(success => {
-          alert('success ' + success)
+          // alert('success ' + success)
           console.log("success  ", success);
           try {
             this.setState(

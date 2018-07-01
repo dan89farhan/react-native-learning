@@ -42,6 +42,9 @@ class MeasurementsForPorJ extends Component {
 
   setMesurements(key, value) {
     this.state.measurements[key] = value;
+    this.setState({
+      measurements: this.state.measurements
+    })
     // console.log("basic info ", this.state.basicInfo);
     // console.log("measurements ", this.state.measurements);
     // console.log("order ", this.state.order);
@@ -76,14 +79,14 @@ class MeasurementsForPorJ extends Component {
         } catch (error) {
           alert(
             "Check your internet connection or give me permission to internet access " +
-              error
+            error
           );
         }
       })
       .catch(error => {
         alert(
           "Check your internet connection or give me permission to internet access " +
-            JSON.stringify(error)
+          JSON.stringify(error)
         );
       });
   }
