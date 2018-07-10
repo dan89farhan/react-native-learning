@@ -60,52 +60,50 @@ class MeasurementsForSorK extends Component {
   saveToDB() {
     let orderID = this.state.order.orderID;
 
-    let orderIDError = this.state.order.orderIDError;
+
 
     // alert("orderIDError is " + JSON.stringify(this.state.order));
-    console.log("Order status ", this.state.order);
+    // console.log("Order status ", this.state.order);
+    let dbCon = db.database().ref("/orders/" + orderID);
 
-    if (orderIDError == true) {
-      this.uploadImage(uri, orderID)
-        .then(success => {
-          // alert('success ' + success)
-          console.log("success  ", success);
-          try {
-            this.setState(
-              {
-                imageUrl: success
-              },
-              () => {
-                let dbCon = db.database().ref("/orders/" + orderID);
+    // this.uploadImage(uri, orderID)
+    // .then(success => {
+    // alert('success ' + success)
+    // console.log("success  ", success);
 
-                let obj = {};
-                obj = this.state.basicInfo;
-                obj["measurements"] = {};
-                obj["measurements"][
-                  this.state.clothType.type
-                ] = this.state.measurements;
-                obj["image_url"] = success;
-                dbCon.set(obj);
-                // console.log("obj info ", obj);
-                alert("Successfully uploading the data to the server");
-              }
-            );
-          } catch (error) {
-            alert(
-              "Check your internet connection or give me permission to internet access " +
-              error
-            );
-          }
-        })
-        .catch(error => {
-          alert(
-            "Check your internet connection or give me permission to internet access " +
-            JSON.stringify(error)
-          );
-        });
-    } else {
-      alert("Order ID has already been used!");
-    }
+    this.setState(
+      {
+        imageUrl: 'success'
+      },
+      () => {
+
+        let obj = {};
+        let measurementsObj = {};
+        obj = this.state.basicInfo;
+        let measurements = this.state.measurements;
+        measurements['image_url'] = 'success';
+        measurementsObj["measurements"] = {};
+
+        measurementsObj["measurements"][
+          this.state.clothType.type
+        ] = measurements
+        dbCon.update(obj);
+        dbCon.push(measurementsObj);
+
+        alert("Successfully uploading the data to the server");
+
+
+      }
+    );
+
+    // })
+    // .catch(error => {
+    //   alert(
+    //     "Check your internet connection or give me permission to internet access " +
+    //     JSON.stringify(error)
+    //   );
+    // });
+
   }
   pickImage() {
     // More info on all the options is below in the README...just some common use cases shown here

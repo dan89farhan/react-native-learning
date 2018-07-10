@@ -14,8 +14,8 @@ import ImagePicker from "react-native-image-picker";
 const Blob = RNFetchBlob.polyfill.Blob;
 
 const fs = RNFetchBlob.fs;
-window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
-window.Blob = Blob;
+// window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
+// window.Blob = Blob;
 
 class MeasurementsForPorJ extends Component {
   constructor(props) {
@@ -53,42 +53,44 @@ class MeasurementsForPorJ extends Component {
   saveToDB() {
     let orderID = this.state.order.orderID;
 
-    this.uploadImage(uri, orderID)
-      .then(success => {
-        console.log("success  ", success);
-        try {
-          this.setState(
-            {
-              imageUrl: success
-            },
-            () => {
-              let dbCon = db.database().ref("/orders/" + orderID);
+    let dbCon = db.database().ref("/orders/" + orderID);
+    // this.uploadImage(uri, orderID)
+    // .then(success => {
+    // alert('success ' + success)
+    // console.log("success  ", success);
 
-              let obj = {};
-              obj = this.state.basicInfo;
-              obj["measurements"] = {};
-              obj["measurements"][
-                this.state.clothType.type
-              ] = this.state.measurements;
-              obj["image_url"] = success;
-              dbCon.set(obj);
-              // console.log("obj info ", obj);
-              alert("Successfully uploading the data to the server");
-            }
-          );
-        } catch (error) {
-          alert(
-            "Check your internet connection or give me permission to internet access " +
-            error
-          );
-        }
-      })
-      .catch(error => {
-        alert(
-          "Check your internet connection or give me permission to internet access " +
-          JSON.stringify(error)
-        );
-      });
+    this.setState(
+      {
+        imageUrl: 'success'
+      },
+      () => {
+
+        let obj = {};
+        let measurementsObj = {};
+        obj = this.state.basicInfo;
+        let measurements = this.state.measurements;
+        measurements['image_url'] = 'success';
+        measurementsObj["measurements"] = {};
+
+        measurementsObj["measurements"][
+          this.state.clothType.type
+        ] = measurements
+        dbCon.update(obj);
+        dbCon.push(measurementsObj);
+
+        alert("Successfully uploading the data to the server");
+
+
+      }
+    );
+
+    // })
+    // .catch(error => {
+    //   alert(
+    //     "Check your internet connection or give me permission to internet access " +
+    //     JSON.stringify(error)
+    //   );
+    // });
   }
 
   pickImage() {
@@ -119,7 +121,7 @@ class MeasurementsForPorJ extends Component {
   }
 
   uploadImage = (uri, imageName, mime = "image/jpg") => {
-    console.log("upload image ");
+    console.log("upload image ", uri);
 
     return new Promise((resolve, reject) => {
       const uploadUri =
