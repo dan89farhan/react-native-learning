@@ -30,10 +30,10 @@ class MeasurementsForPorJ extends Component {
         thigh: 0,
         knee: 0,
         bottom: 0,
-        backrise: 0
+        backrise: 0,
+        image_url: 'http://vignette1.wikia.nocookie.net/ofibty/images/5/56/Insert-Photo-Here.jpg/revision/latest?cb=20130607022022'
       },
-      imageUrl:
-        "http://vignette1.wikia.nocookie.net/ofibty/images/5/56/Insert-Photo-Here.jpg/revision/latest?cb=20130607022022",
+
       basicInfo: this.props.basicInfo,
       clothType: this.props.clothType,
       order: this.props.order
@@ -169,6 +169,7 @@ class MeasurementsForPorJ extends Component {
               }}
               keyboardType="numeric"
               onChangeText={length => this.setMesurements("length", length)}
+              value={`${this.state.measurements.length}`}
             />
           </Item>
           <Item inlineLabel>
@@ -183,6 +184,7 @@ class MeasurementsForPorJ extends Component {
               }}
               keyboardType="numeric"
               onChangeText={waist => this.setMesurements("waist", waist)}
+              value={`${this.state.measurements.waist}`}
             />
           </Item>
           <Item inlineLabel>
@@ -197,6 +199,7 @@ class MeasurementsForPorJ extends Component {
               }}
               keyboardType="numeric"
               onChangeText={seat => this.setMesurements("seat", seat)}
+              value={`${this.state.measurements.seat}`}
             />
           </Item>
           <Item inlineLabel>
@@ -211,6 +214,7 @@ class MeasurementsForPorJ extends Component {
               }}
               keyboardType="numeric"
               onChangeText={fork => this.setMesurements("fork", fork)}
+              value={`${this.state.measurements.fork}`}
             />
           </Item>
           <Item inlineLabel>
@@ -225,6 +229,7 @@ class MeasurementsForPorJ extends Component {
               }}
               keyboardType="numeric"
               onChangeText={thigh => this.setMesurements("thigh", thigh)}
+              value={`${this.state.measurements.thigh}`}
             />
           </Item>
           <Item inlineLabel>
@@ -239,6 +244,7 @@ class MeasurementsForPorJ extends Component {
               }}
               keyboardType="numeric"
               onChangeText={knee => this.setMesurements("knee", knee)}
+              value={`${this.state.measurements.knee}`}
             />
           </Item>
           <Item inlineLabel>
@@ -253,6 +259,7 @@ class MeasurementsForPorJ extends Component {
               }}
               keyboardType="numeric"
               onChangeText={bottom => this.setMesurements("bottom", bottom)}
+              value={`${this.state.measurements.bottom}`}
             />
           </Item>
           <Item inlineLabel>
@@ -265,6 +272,7 @@ class MeasurementsForPorJ extends Component {
               onChangeText={backrise =>
                 this.setMesurements("backrise", backrise)
               }
+              value={`${this.state.measurements.backrise}`}
             />
           </Item>
           <Image
@@ -273,7 +281,7 @@ class MeasurementsForPorJ extends Component {
               width: 320,
               resizeMode: "stretch"
             }}
-            source={{ uri: this.state.imageUrl }}
+            source={{ uri: this.state.measurements.image_url }}
           />
           <Button block info onPress={this.pickImage.bind(this)}>
             <Text> Upload Image </Text>

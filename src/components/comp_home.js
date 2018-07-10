@@ -30,6 +30,7 @@ import MeasurementsForPorJ from "./comp_measurements_for_porj";
 export default class StackedLabelExample extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       selected: "Shirt",
       loading: true,
@@ -41,32 +42,30 @@ export default class StackedLabelExample extends Component {
     };
   }
 
-  UNSAFE_componentWillMount() {
+  componentWillMount() {
+
+    const { navigation } = this.props;
+    const basicInfo = navigation.getParam('basicInfo', { name: '', gender: '', mobile: '' });
     this.setState({
-      basicInfo: {
-        name: "",
-        mobile: "",
-        gender: ""
-      },
+
       clothType: {
         type: "shirt"
       },
       order: {
         orderID: 0,
         orderIDError: false
-      }
+      },
+      basicInfo: basicInfo
     });
+
+
   }
 
   onValueChange(currentValue) {
-    let temp = null;
-
-    console.log("current Value is ", currentValue);
+    let temp = false;
 
     if (currentValue == "shirt" || currentValue == "kurta") {
       temp = true;
-    } else {
-      temp = false;
     }
 
     this.setState({
@@ -90,10 +89,14 @@ export default class StackedLabelExample extends Component {
 
       default:
         this.state.basicInfo[key] = value;
+        this.setState({
+          basicInfo: this.state.basicInfo
+        })
         break;
     }
 
-    console.log(this.state.order);
+
+    // console.log(this.state.order);
   }
 
   checkOrderID(key, value) {
@@ -110,7 +113,7 @@ export default class StackedLabelExample extends Component {
 
 
           // alert("key " + JSON.stringify(snapshot.val()));
-          this.forceUpdate();
+
         }
       });
     } else {
@@ -124,7 +127,8 @@ export default class StackedLabelExample extends Component {
     if (this.state.loading) {
       // return <Expo.AppLoading />;
     }
-    console.log("re render");
+
+
     return (
       <Container>
         <Header>
@@ -157,7 +161,7 @@ export default class StackedLabelExample extends Component {
                         this.TextInput2._root.focus();
                       }}
                       onChangeText={name => this.setBasicInfo("name", name)}
-                    // value={this.state.name}
+                      value={this.state.basicInfo.name}
                     />
                   </Item>
                   <Item inlineLabel last>
@@ -174,6 +178,7 @@ export default class StackedLabelExample extends Component {
                       onChangeText={mobile =>
                         this.setBasicInfo("mobile", mobile)
                       }
+                      value={this.state.basicInfo.mobile}
                     />
                   </Item>
                   <Item inlineLabel last>
@@ -189,6 +194,7 @@ export default class StackedLabelExample extends Component {
                       onChangeText={gender =>
                         this.setBasicInfo("gender", gender)
                       }
+                      value={this.state.basicInfo.gender}
                     />
                   </Item>
                   <Item inlineLabel last error>

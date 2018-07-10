@@ -7,7 +7,6 @@ import db from "firebase";
 
 import RNFetchBlob from "react-native-fetch-blob";
 
-// var ImagePicker = require("react-native-image-picker");
 import ImagePicker from "react-native-image-picker";
 
 // Prepare Blob support
@@ -35,9 +34,9 @@ class MeasurementsForSorK extends Component {
         seat: 0,
         frontfix: 0,
         collom: 0,
-        cuff: 0
+        cuff: 0,
+        image_url: 'http://vignette1.wikia.nocookie.net/ofibty/images/5/56/Insert-Photo-Here.jpg/revision/latest?cb=20130607022022'
       },
-      imageUrl: "https://firebasestorage.googleapis.com/v0/b/tailorapp-fd888.appspot.com/o/29.jpg?alt=media&token=dc54b3ce-e05d-4340-b5aa-c1e8c8c9aa02",
       basicInfo: this.props.basicInfo,
       clothType: this.props.clothType,
       order: this.props.order
@@ -45,16 +44,12 @@ class MeasurementsForSorK extends Component {
   }
 
 
-  componentDidMount() {
-
-  }
-
   setMesurements(key, value) {
     this.state.measurements[key] = value;
     this.setState({
       measurements: this.state.measurements
     })
-    console.log("order ", this.state.order);
+
   }
 
   saveToDB() {
@@ -313,7 +308,7 @@ class MeasurementsForSorK extends Component {
               width: 320,
               resizeMode: "stretch"
             }}
-            source={{ uri: this.state.imageUrl }}
+            source={{ uri: this.state.measurements.image_url }}
           />
           <Button block info onPress={this.pickImage.bind(this)}>
             <Text> Upload Image </Text>

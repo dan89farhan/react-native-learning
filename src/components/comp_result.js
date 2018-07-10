@@ -26,7 +26,6 @@ export default class SearchResults extends Component {
         this.state = {
             basicInfo: {},
             measurements: [
-
                 {
                     shirt: {
                         chest: 100,
@@ -40,14 +39,11 @@ export default class SearchResults extends Component {
                         stomach: 100,
                     }
                 }
-
             ],
-
             measurementsType: [],
             imageURL: [],
             orderID: [],
             uniqueKeys: []
-
         }
     }
     componentWillMount() {
@@ -89,10 +85,10 @@ export default class SearchResults extends Component {
         // console.log('in render measurements ', this.state.measurements);
         // alert('in render measurements ' + JSON.stringify(this.state.basicInfo.name))
 
-
+        // alert('basic info ' + JSON.stringify(this.state.basicInfo))
         return (
 
-            <Container>
+            < Container >
                 <Header>
                     <Left>
                         <Button transparent onPress={() => this.props.navigation.goBack()}>
@@ -103,9 +99,14 @@ export default class SearchResults extends Component {
                         <Title>Result</Title>
                     </Body>
                     <Right>
-                        <Button onPress={() => this.props.navigation.navigate('Home')}>
+                        <Button onPress={
+                            () => this.props.navigation.push("Home", {
+                                basicInfo: this.state.basicInfo,
+                                orderID: this.state.orderID
+                            })
+                        } success>
                             {/* <Icon name='arrow-back' /> */}
-                            <Text>Create New/Modify</Text>
+                            <Text>New/Modify</Text>
                         </Button>
                     </Right>
                 </Header>
